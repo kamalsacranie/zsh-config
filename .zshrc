@@ -7,8 +7,11 @@ alias ls='ls -a'
 alias bwgen='bw generate -luns 16 | pbcopy'
 
 
-# Environemntal variables
+# =====Environemntal variables
+# Setting vimrc directory
 export VIMINIT="source $HOME/.config/vim/.vimrc"
+# Setting coloured list output
+export CLICOLOR=1
 
 
 # Calling neofetch
