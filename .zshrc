@@ -1,5 +1,6 @@
 # Making backspace work proper
 bindkey "^?" backward-delete-char
+
 # My aliases
 alias ranger='ranger --choosedir=$HOME/.config/ranger/.lastdir; LASTDIR=`cat $HOME/.config/ranger/.lastdir`; cd "$LASTDIR";'
 alias ls='ls -A'
