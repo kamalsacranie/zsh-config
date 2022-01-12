@@ -6,33 +6,24 @@ alias ls='ls -A'
 alias bwgen='bw generate -luns 16 | pbcopy'
 alias githome='cd $(git rev-parse --show-toplevel)'
 
-# =====Environemntal variables
-# Setting vimrc directory
-# export VIMINIT="source $HOME/.config/vim/.vimrc"
-# Setting coloured list output
-export CLICOLOR=1
-export XDG_CONFIG_HOME=$HOME/.config
-
-
 # Turning off error bells
 unsetopt BEEP
 
-
 # Changing keybindings to vim
-bindkey -v
-
+# bindkey -v
 
 # ========= Plugins =========
-# Starship config
-fpath=( "$ZDOTDIR" $fpath )
+# Theme
+fpath+=$ZDOTDIR/themes/pure
 autoload -U promptinit; promptinit
-prompt spaceship
-SPACESHIP_PROMPT_ADD_NEWLINE=true
-SPACESHIP_PROMPT_SEPARATE_LINE=true
-
+prompt pure
+# Better vi mode
+source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# Autocomplete
 source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # must be last because reasons
 source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Assigning our path based on what OS we are running
