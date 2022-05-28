@@ -10,9 +10,13 @@ bindkey "^?" backward-delete-char
 
 # My aliases
 alias ranger='ranger --choosedir=$HOME/.config/ranger/.lastdir; LASTDIR=`cat $HOME/.config/ranger/.lastdir`; cd "$LASTDIR";'
-alias ls='ls -A'
-alias bwgen='bw generate -luns 16 | pbcopy'
+alias ls='ls -AF1'
+alias bwgen='bw generate -luns 16 | pbcopy; exit'
 alias githome='cd $(git rev-parse --show-toplevel)'
+# formating our gh repos to be listed normally and then grepped
+alias ghrepolist="gh repo list --json url,name --template '{{range .}}{{tablerow .url}}{{end}}'"
+# Papis export
+alias papisexport="papis export --all --format bibtex > sources.bib"
 
 # Turning off error bells
 unsetopt BEEP
@@ -21,13 +25,8 @@ unsetopt BEEP
 # bindkey -v
 
 # ========= Plugins =========
-# Theme
-# Pure
-# fpath+=$ZDOTDIR/themes/pure
-# autoload -U promptinit; promptinit
-# prompt pure
 # Powerline
-source ~/.config/zsh/themes/powerlevel10k/powerlevel10k.zsh-theme
+source $ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme
 # Better vi mode
 source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 # Autocomplete
@@ -37,11 +36,13 @@ source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.z
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Assigning our path based on what OS we are running
+
+# Keeps our homebrew python in the path so that pyenv can see it
 arch_name="$(uname -m)"
 if [ "${arch_name}" = "x86_64" ]; then
     if [ "$(sysctl -in sysctl.proc_translated)" = "1" ]; then
         export PATH="/opt/homebrew/bin:$PATH"
+        # Assigning our path based on what OS we are running. This was to make our python command run the lates python
         export PATH="$(brew --prefix)/opt/python/libexec/bin:$PATH"
     else
         export PATH="/usr/local/share:$PATH"
@@ -53,9 +54,22 @@ else
     echo "Unknown architecture: ${arch_name}"
 fi
 
+# rust cargo path
+export PATH="$CARGO_HOME/bin:$PATH"
+# Adding our local user bin folder for my custom scripts
 export PATH="$HOME/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ./.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+
+# Sorting out pyenv
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv init --path)"
+fi
+
+# Sourcing my functions
+source $ZDOTDIR/functs.zsh
