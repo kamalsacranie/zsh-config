@@ -6,6 +6,7 @@ export PYTHONSTARTUP=$XDG_CONFIG_HOME/.pythonrc
 export TRASHDIR=$HOME/.Trash
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
 # =====Environemntal variables
 # Setting vimrc directory
 # export VIMINIT="source $HOME/.config/vim/.vimrc"

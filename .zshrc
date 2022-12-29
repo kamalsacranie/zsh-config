@@ -58,6 +58,8 @@ fi
 export PATH="$CARGO_HOME/bin:$PATH"
 # Adding our local user bin folder for my custom scripts
 export PATH="$HOME/bin:$PATH"
+# For pipx
+export PATH="$HOME/.local/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ./.fzf.zsh
 
@@ -73,3 +75,7 @@ fi
 
 # Sourcing my functions
 source $ZDOTDIR/functs.zsh
+
+# registering our completions (no need for compinit because we have zsh autocomplete)
+fpath+=/opt/homebrew/share/zsh/site-functions/
+eval "$(register-python-argcomplete pipx)"
