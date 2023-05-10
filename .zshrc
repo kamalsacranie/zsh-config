@@ -21,9 +21,6 @@ alias papisexport="papis export --all --format bibtex > sources.bib"
 # Turning off error bells
 unsetopt BEEP
 
-# Changing keybindings to vim
-# bindkey -v
-
 # ========= Plugins =========
 # Powerline
 source $ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme
@@ -34,6 +31,7 @@ source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # must be last because reasons
 source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 
+# Homebrew completions
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 
@@ -54,13 +52,6 @@ else
     echo "Unknown architecture: ${arch_name}"
 fi
 
-# rust cargo path
-export PATH="$CARGO_HOME/bin:$PATH"
-# Adding our local user bin folder for my custom scripts
-export PATH="$HOME/bin:$PATH"
-# For pipx
-export PATH="$HOME/.local/bin:$PATH"
-
 [ -f ~/.fzf.zsh ] && source ./.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
@@ -77,5 +68,21 @@ fi
 source $ZDOTDIR/functs.zsh
 
 # registering our completions (no need for compinit because we have zsh autocomplete)
-fpath+=/opt/homebrew/share/zsh/site-functions/
-eval "$(register-python-argcomplete pipx)"
+# homebrew completions (connement out because done automatically by our zsh autocomplete???)
+# if type brew &>/dev/null
+# then
+#     FPATH+=/opt/homebrew/share/zsh/site-functions/
+# fi
+# pipx completions
+if type pipx &>/dev/null
+then
+    eval "$(register-python-argcomplete pipx)"
+fi
+
+# === Ruby === for some reason this needs to be in RC and not zshenv?? so weird
+export RBENV_ROOT=/opt/rbenv
+export PATH=$RBENV_ROOT/shims:$PATH
+
+# === Misc version manager for anything (asdf) ===
+# sourcing script
+# $(brew --prefix asdf)/libexec/asdf.sh

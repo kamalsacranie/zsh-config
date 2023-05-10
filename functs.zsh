@@ -3,5 +3,5 @@ function gi() {
 }
 
 function ghcurl() {
-    curl $(echo $@ | sed s/github\.com/raw\.githubusercontent\.com/g | sed s/'bin\/blob\/'/'bin\/'/g)
+    curl $(echo $@ | sed s/github\.com/raw\.githubusercontent\.com/g | sed s/'blob\/'/''/g)
 }
