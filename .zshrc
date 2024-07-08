@@ -5,8 +5,35 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Making backspace work proper
+# ========= Plugins =========
+# Powerline
+source $ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme
+# Better vi mode
+source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# Autocomplete
+source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# must be last because reasons
+source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+
+# ======== History ========
+setopt SHARE_HISTORY            # Share history across all sessions
+setopt INC_APPEND_HISTORY       # Add commands to the history file immediately
+setopt HIST_IGNORE_DUPS         # Ignore duplicate commands in the history
+setopt HIST_FIND_NO_DUPS        # Do not display duplicates in the history search
+setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+
+# Keybindings
 bindkey "^?" backward-delete-char
+bindkey '^[w' kill-region
+# bindkey '^p' .history-search-backward
+# bindkey '^n' .history-search-forward
+bindkey "^[[A" .history-search-backward
+bindkey "^[[B" .history-search-forward
 
 # My aliases
 alias ranger='ranger --choosedir=$HOME/.config/ranger/.lastdir; LASTDIR=`cat $HOME/.config/ranger/.lastdir`; cd "$LASTDIR";'
@@ -20,16 +47,6 @@ alias papisexport="papis export --all --format bibtex > sources.bib"
 
 # Turning off error bells
 unsetopt BEEP
-
-# ========= Plugins =========
-# Powerline
-source $ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme
-# Better vi mode
-source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-# Autocomplete
-source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-# must be last because reasons
-source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 
 # Homebrew completions
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -71,7 +88,7 @@ source $ZDOTDIR/functs.zsh
 # homebrew completions (connement out because done automatically by our zsh autocomplete???)
 # if type brew &>/dev/null
 # then
-#     FPATH+=/opt/homebrew/share/zsh/site-functions/
+fpath+=/opt/homebrew/share/zsh/site-functions/
 # fi
 # pipx completions
 if type pipx &>/dev/null
@@ -86,3 +103,10 @@ export PATH=$RBENV_ROOT/shims:$PATH
 # === Misc version manager for anything (asdf) ===
 # sourcing script
 # $(brew --prefix asdf)/libexec/asdf.sh
+
+export PATH=$VIRTUAL_ENV/bin:$PATH
+
+eval "$(zoxide init --cmd cd zsh)"
+
+# opam configuration
+[[ ! -r /opt/opam/opam-init/init.zsh ]] || source /opt/opam/opam-init/init.zsh  > /dev/null 2> /dev/null
