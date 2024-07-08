@@ -5,38 +5,43 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# ========= Plugins =========
-# Powerline
+# === Searching previous command based on current typed command ===
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+# ===
+
+# === Enables editing command in an editor
+autoload -z edit-command-line
+zle -N edit-command-line
+# ===
+
+source "$ZDOTDIR/src/history.sh"
+source $ZDOTDIR/src/mappings.sh
+
+autoload -U compinit; compinit
+
+# === Plugins ===
 source $ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme
-# Better vi mode
-source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-# Autocomplete
-source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-# must be last because reasons
+# source $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+source $ZDOTDIR/plugins/fzf-tab/fzf-tab.plugin.zsh
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-t:toggle'
+source $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-
-# ======== History ========
-setopt SHARE_HISTORY            # Share history across all sessions
-setopt INC_APPEND_HISTORY       # Add commands to the history file immediately
-setopt HIST_IGNORE_DUPS         # Ignore duplicate commands in the history
-setopt HIST_FIND_NO_DUPS        # Do not display duplicates in the history search
-setopt HIST_REDUCE_BLANKS
-setopt HIST_IGNORE_SPACE
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
-
-# Keybindings
-bindkey "^?" backward-delete-char
-bindkey '^[w' kill-region
-# bindkey '^p' .history-search-backward
-# bindkey '^n' .history-search-forward
-bindkey "^[[A" .history-search-backward
-bindkey "^[[B" .history-search-forward
 
 # My aliases
 alias ranger='ranger --choosedir=$HOME/.config/ranger/.lastdir; LASTDIR=`cat $HOME/.config/ranger/.lastdir`; cd "$LASTDIR";'
+alias vi=nvim
 alias ls='ls -AF1'
 alias bwgen='bw generate -luns 16 | pbcopy; exit'
 alias githome='cd $(git rev-parse --show-toplevel)'
@@ -50,7 +55,6 @@ unsetopt BEEP
 
 # Homebrew completions
 eval "$(/opt/homebrew/bin/brew shellenv)"
-
 
 # Keeps our homebrew python in the path so that pyenv can see it
 arch_name="$(uname -m)"
@@ -99,10 +103,6 @@ fi
 # === Ruby === for some reason this needs to be in RC and not zshenv?? so weird
 export RBENV_ROOT=/opt/rbenv
 export PATH=$RBENV_ROOT/shims:$PATH
-
-# === Misc version manager for anything (asdf) ===
-# sourcing script
-# $(brew --prefix asdf)/libexec/asdf.sh
 
 export PATH=$VIRTUAL_ENV/bin:$PATH
 

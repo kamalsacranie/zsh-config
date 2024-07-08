@@ -104,11 +104,5 @@ export LIBRARY_PATH="/opt/homebrew/lib:$LIBRARY_PATH"
 
 export PATH="/opt/personal/bin:$PATH"
 
-# === ZSH History ===
-export HISTSIZE=10000
-export SAVEHIST=$HISTSIZE
-export HISTFILE="$HOME/.local/share/zsh/history"
-export HISTDUP=erase
-
 # === Opam ===
 export OPAMROOT=/opt/opam
